@@ -56,7 +56,7 @@ public class FamilyTree {
         scanner.nextLine();
         System.out.println("Введите имя человека");
         String str = scanner.nextLine();
-        return humanList.stream().filter(human -> human.getName().equals(str)).findFirst().get();
+        return humanList.stream().filter(human -> human.getName().equals(str.toLowerCase())).findFirst().get();
     }
 
     private Human add(){
