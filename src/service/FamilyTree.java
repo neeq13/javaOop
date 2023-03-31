@@ -1,16 +1,18 @@
 package service;
 
 import human.Human;
+import utils.WriteAndRead;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class FamilyTree {
     private final List<Human> humanList;
+    private final WriteAndRead writeAndRead;
 
     public  FamilyTree(){
-        humanList = new ArrayList<>();
+        writeAndRead = new WriteAndRead();
+        humanList = writeAndRead.read();
     }
 
     public Human search(String str){
@@ -24,6 +26,13 @@ public class FamilyTree {
         all.append("\n");
         for (Human human: humanList){
             all.append(human.getFullName());
+            all.append(", г.р. ");
+            all.append(human.getBirthday());
+            all.append(" ");
+            if (Objects.nonNull(human.getDied())){
+                all.append("умер: ");
+                all.append(human.getDied());
+            }
             all.append("\n----------------");
             all.append("\n");
         }
@@ -55,6 +64,15 @@ public class FamilyTree {
             mather.getChildren().add(child);
         }
         return true;
+    }
+
+    public boolean save(){
+        return writeAndRead.save(humanList);
+    }
+
+    public List<Human> read(){
+        humanList.addAll(writeAndRead.read());
+        return humanList;
     }
 
 }

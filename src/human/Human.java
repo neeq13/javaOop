@@ -1,16 +1,20 @@
 package human;
 
+import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
-public class Human {
+public class Human implements Serializable {
     UUID id = UUID.randomUUID();
     private String name;
     private String surname;
     private String patronymic;
     private final Sex sex;
     private LocalDate birthday;
-    private LocalDate died = null;
+    private LocalDate died;
     private Human mother;
     private Human father;
     private List<Human> children;
