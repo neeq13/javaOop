@@ -1,7 +1,8 @@
+import service.StartTree;
 
 public class Main {
     public static void main(String[] args) {
-        FamilyTree tree = new FamilyTree();
-        tree.start();
+        StartTree startTree = new StartTree();
+        startTree.start();
     }
 }
