@@ -1,8 +1,8 @@
-import service.StartTree;
+import service.TreeService;
 
 public class Main {
     public static void main(String[] args) {
-        StartTree startTree = new StartTree();
+        TreeService startTree = new TreeService();
         startTree.start();
     }
 }

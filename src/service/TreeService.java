@@ -2,11 +2,15 @@ package service;
 
 import human.Human;
 import human.Sex;
+import human.comparators.ComparatorByBirthday;
+import human.comparators.ComparatorByName;
+import tree.FamilyTree;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Scanner;
 
-public class StartTree {
+public class TreeService {
     private final Scanner scanner = new Scanner(System.in);
 
     private final FamilyTree tree = new FamilyTree();
@@ -19,7 +23,6 @@ public class StartTree {
 //        tree.add(new Human("Мария", "Романова", "Фёдоровна", Sex.WOMEN, LocalDate.of(1847, 11, 26), LocalDate.of(1928, 10, 13)));
 //        tree.addChild(tree.search("Мария"), tree.search("Александр"), tree.search("Николай"));
 //        tree.addChild(tree.search("Александра"), tree.search("Николай"), tree.search("Алексей"));
-
         boolean flag = true;
         while (flag){
             System.out.println("""
@@ -31,7 +34,16 @@ public class StartTree {
             System.out.print("Ваш выбор: ");
             int result = scanner.nextInt();
             switch (result) {
-                case 1 -> System.out.println(tree.all());
+                case 1 -> {
+                    System.out.println("1. Сортировать по имени 2. Сортировать по дате рождения");
+                    int temp = scanner.nextInt();
+                    if (temp == 1){
+                        tree.sortByName();
+                    }else {
+                        tree.sortByBirthday();
+                    }
+                    System.out.println(all());
+                }
                 case 2 -> System.out.println(search().getInfo());
                 case 3 -> {
                     add().getInfo();
@@ -131,5 +143,25 @@ public class StartTree {
         newHuman = new Human(name, surname, patronymic, sex, birthday, died);
         tree.add(newHuman);
         return newHuman;
+    }
+
+    public String all(){
+        StringBuilder all = new StringBuilder();
+        all.append("Всего человек в древе: ");
+        all.append(tree.getHumanList().size());
+        all.append("\n");
+        for (Human human: tree){
+            all.append(human.getFullName());
+            all.append(", г.р. ");
+            all.append(human.getBirthday());
+            all.append(" ");
+            if (Objects.nonNull(human.getDied())){
+                all.append("умер: ");
+                all.append(human.getDied());
+            }
+            all.append("\n----------------");
+            all.append("\n");
+        }
+        return all.toString();
     }
 }

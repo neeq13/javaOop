@@ -1,14 +1,18 @@
-package service;
+package tree;
 
 import human.Human;
+import human.comparators.ComparatorByBirthday;
+import human.comparators.ComparatorByName;
+import utils.SavingAndLoading;
 import utils.WriteAndRead;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-public class FamilyTree {
+public class FamilyTree implements Iterable<Human> {
     private final List<Human> humanList;
-    private final WriteAndRead writeAndRead;
+    private final SavingAndLoading writeAndRead;
 
     public  FamilyTree(){
         writeAndRead = new WriteAndRead();
@@ -17,26 +21,6 @@ public class FamilyTree {
 
     public Human search(String str){
         return humanList.stream().filter(human -> human.getName().toLowerCase().equals(str.toLowerCase())).findFirst().get();
-    }
-
-    public String all(){
-        StringBuilder all = new StringBuilder();
-        all.append("Всего человек в древе: ");
-        all.append(humanList.size());
-        all.append("\n");
-        for (Human human: humanList){
-            all.append(human.getFullName());
-            all.append(", г.р. ");
-            all.append(human.getBirthday());
-            all.append(" ");
-            if (Objects.nonNull(human.getDied())){
-                all.append("умер: ");
-                all.append(human.getDied());
-            }
-            all.append("\n----------------");
-            all.append("\n");
-        }
-        return all.toString();
     }
 
     public boolean add(Human human){
@@ -75,4 +59,20 @@ public class FamilyTree {
         return humanList;
     }
 
+    @Override
+    public Iterator<Human> iterator() {
+        return humanList.iterator();
+    }
+
+    public void sortByName(){
+        humanList.sort(new ComparatorByName());
+    }
+
+    public void sortByBirthday(){
+        humanList.sort(new ComparatorByBirthday());
+    }
+
+    public List<Human> getHumanList() {
+        return humanList;
+    }
 }
