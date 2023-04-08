@@ -2,9 +2,9 @@ package service;
 
 import human.Human;
 import human.Sex;
-import human.comparators.ComparatorByBirthday;
-import human.comparators.ComparatorByName;
 import tree.FamilyTree;
+import utils.SavingAndLoading;
+import utils.WriteAndRead;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -12,8 +12,13 @@ import java.util.Scanner;
 
 public class TreeService {
     private final Scanner scanner = new Scanner(System.in);
+    private final SavingAndLoading writeAndRead;
+    private final FamilyTree<Human> tree;
 
-    private final FamilyTree tree = new FamilyTree();
+    public TreeService() {
+        writeAndRead = new WriteAndRead();
+        tree = new FamilyTree<>(writeAndRead.read());
+    }
 
     public void start(){
 //        tree.add(new Human("Алексей", "Романов", "Николаевич", Sex.MAN, LocalDate.of(1904, 8, 12), LocalDate.of(1918, 7, 17)));
@@ -47,18 +52,18 @@ public class TreeService {
                 case 2 -> System.out.println(search().getInfo());
                 case 3 -> {
                     add().getInfo();
-                    tree.save();
+                    save();
                 }
                 case 4 -> {
                     if(addChild()){
                         System.out.println("Родственные связи успешно установлены");
-                        tree.save();
+                        save();
                     } else {
                         System.out.println("Что-то пошло не так, возможно нужно проверить данные и повторить");
                     }
                 }
                 case 0 -> {
-                    tree.save();
+                    save();
                     flag = false;
                 }
             }
@@ -163,5 +168,9 @@ public class TreeService {
             all.append("\n");
         }
         return all.toString();
+    }
+
+    public boolean save(){
+        return writeAndRead.save(tree.getHumanList());
     }
 }

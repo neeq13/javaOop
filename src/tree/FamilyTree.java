@@ -3,35 +3,31 @@ package tree;
 import human.Human;
 import human.comparators.ComparatorByBirthday;
 import human.comparators.ComparatorByName;
-import utils.SavingAndLoading;
-import utils.WriteAndRead;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-public class FamilyTree implements Iterable<Human> {
-    private final List<Human> humanList;
-    private final SavingAndLoading writeAndRead;
+public class FamilyTree<T extends Human> implements Iterable<T> {
+    private final List<T> humanList;
 
-    public  FamilyTree(){
-        writeAndRead = new WriteAndRead();
-        humanList = writeAndRead.read();
+    public  FamilyTree(List<T> list){
+        humanList = list;
     }
 
-    public Human search(String str){
+    public T search(String str){
         return humanList.stream().filter(human -> human.getName().toLowerCase().equals(str.toLowerCase())).findFirst().get();
     }
 
-    public boolean add(Human human){
-        if (!humanList.contains(human)){
-            humanList.add(human);
+    public boolean add(T t){
+        if (!humanList.contains(t)){
+            humanList.add(t);
             return true;
         }
         return false;
     }
 
-    public boolean addChild(Human mather, Human father, Human child){
+    public boolean addChild(T mather, T father, T child){
         if (Objects.nonNull(child.getFather()) && Objects.nonNull(child.getMother())){
             return false;
         }
@@ -50,29 +46,20 @@ public class FamilyTree implements Iterable<Human> {
         return true;
     }
 
-    public boolean save(){
-        return writeAndRead.save(humanList);
-    }
-
-    public List<Human> read(){
-        humanList.addAll(writeAndRead.read());
-        return humanList;
-    }
-
     @Override
-    public Iterator<Human> iterator() {
+    public Iterator<T> iterator() {
         return humanList.iterator();
     }
 
     public void sortByName(){
-        humanList.sort(new ComparatorByName());
+        humanList.sort(new ComparatorByName<>());
     }
 
     public void sortByBirthday(){
-        humanList.sort(new ComparatorByBirthday());
+        humanList.sort(new ComparatorByBirthday<>());
     }
 
-    public List<Human> getHumanList() {
+    public List<T> getHumanList() {
         return humanList;
     }
 }
