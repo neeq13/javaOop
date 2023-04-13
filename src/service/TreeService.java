@@ -3,6 +3,8 @@ package service;
 import human.Human;
 import human.Sex;
 import tree.FamilyTree;
+import ui.Menu;
+import ui.View;
 import utils.SavingAndLoading;
 import utils.WriteAndRead;
 
@@ -10,10 +12,11 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class TreeService {
-    private final Scanner scanner = new Scanner(System.in);
+public class TreeService implements View {
+    private Scanner scanner;
     private final SavingAndLoading writeAndRead;
     private final FamilyTree<Human> tree;
+    private boolean flag;
 
     public TreeService() {
         writeAndRead = new WriteAndRead();
@@ -21,57 +24,48 @@ public class TreeService {
     }
 
     public void start(){
-//        tree.add(new Human("Алексей", "Романов", "Николаевич", Sex.MAN, LocalDate.of(1904, 8, 12), LocalDate.of(1918, 7, 17)));
-//        tree.add(new Human("Николай", "Романов", "Александрович", Sex.MAN, LocalDate.of(1868, 5, 18), LocalDate.of(1918, 7, 17)));
-//        tree.add(new Human("Александра", "Романова", "Фёдоровна", Sex.WOMEN, LocalDate.of(1872, 6, 6), LocalDate.of(1918, 7, 17)));
-//        tree.add(new Human("Александр", "Романов", "Александрович", Sex.MAN, LocalDate.of(1845, 3, 10), LocalDate.of(1894, 11, 1)));
-//        tree.add(new Human("Мария", "Романова", "Фёдоровна", Sex.WOMEN, LocalDate.of(1847, 11, 26), LocalDate.of(1928, 10, 13)));
-//        tree.addChild(tree.search("Мария"), tree.search("Александр"), tree.search("Николай"));
-//        tree.addChild(tree.search("Александра"), tree.search("Николай"), tree.search("Алексей"));
-        boolean flag = true;
+        scanner = new Scanner(System.in);
+        Menu menu = new Menu(this);
+        flag = true;
         while (flag){
-            System.out.println("""
-                    1. Вывести всё генеалогическое древо
-                    2. Поиск конкретного человека по его имени
-                    3. Добавить нового члена семьи
-                    4. Добавить ребёнка
-                    0. Выход""");
-            System.out.print("Ваш выбор: ");
-            int result = scanner.nextInt();
-            switch (result) {
-                case 1 -> {
-                    System.out.println("1. Сортировать по имени 2. Сортировать по дате рождения");
-                    int temp = scanner.nextInt();
-                    if (temp == 1){
-                        tree.sortByName();
-                    }else {
-                        tree.sortByBirthday();
-                    }
-                    System.out.println(all());
-                }
-                case 2 -> System.out.println(search().getInfo());
-                case 3 -> {
-                    add().getInfo();
-                    save();
-                }
-                case 4 -> {
-                    if(addChild()){
-                        System.out.println("Родственные связи успешно установлены");
-                        save();
-                    } else {
-                        System.out.println("Что-то пошло не так, возможно нужно проверить данные и повторить");
-                    }
-                }
-                case 0 -> {
-                    save();
-                    flag = false;
-                }
+            print(menu.printMenu());
+            String command = scanner.nextLine();
+            if (checkInput(command)){
+                menu.execute(Integer.parseInt(command));
+            } else {
+                System.out.println("что-то пошло не так");
             }
         }
         scanner.close();
     }
 
-    private boolean addChild() {
+
+    private boolean checkInput(String text){
+        return text.matches("[0-9]+");
+    }
+
+    public void sorted() {
+        System.out.println("1. Сортировать по имени 2. Сортировать по дате рождения");
+        String command = scanner.nextLine();
+        if (checkInput(command)){
+            tree.sortByName();
+        }else {
+            tree.sortByBirthday();
+        }
+        System.out.println(all());
+    }
+
+    public void exit() {
+        save();
+        flag = false;
+    }
+
+    @Override
+    public void print(String text) {
+        System.out.println(text);
+    }
+
+    public void addChild() {
         int temp;
         Human mother = null;
         Human father = null;
@@ -109,22 +103,20 @@ public class TreeService {
             child = add();
         }
         assert child != null;
-        return tree.addChild(mother, father, child);
+        tree.addChild(mother, father, child);
     }
 
-    private Human search(){
+    public Human search(){
         scanner.nextLine();
         System.out.println("Введите имя человека");
         String str = scanner.nextLine();
         return tree.search(str);
     }
 
-    private Human add(){
-        int temp;
+    public Human add(){
         Human newHuman;
         Sex sex;
         LocalDate died = null;
-        scanner.nextLine();
         System.out.println("""
                 Введите данные человека в формате:Фамилия Имя Отчество,\s
                 дата рождения(год месяц число),\s
@@ -138,8 +130,8 @@ public class TreeService {
             died = LocalDate.of(Integer.parseInt(str[6]), Integer.parseInt(str[7]), Integer.parseInt(str[8]));
         }
         System.out.println("Выберите пол: 1. Мужской 2. Женский");
-        temp = scanner.nextInt();
-        if(temp == 1){
+        String command = scanner.nextLine();
+        if (checkInput(command)){
             sex = Sex.MAN;
         }else {
             sex= Sex.WOMEN;
@@ -170,7 +162,7 @@ public class TreeService {
         return all.toString();
     }
 
-    public boolean save(){
-        return writeAndRead.save(tree.getHumanList());
+    public void save(){
+        writeAndRead.save(tree.getHumanList());
     }
 }
