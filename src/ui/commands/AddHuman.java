@@ -1,11 +1,11 @@
 package ui.commands;
 
-import service.TreeService;
+import Presenter.Presenter;
 
 public class AddHuman extends Command{
 
-    public AddHuman(TreeService treeService) {
-        super(treeService);
+    public AddHuman(Presenter presenter) {
+        super(presenter);
     }
 
     @Override
@@ -15,6 +15,6 @@ public class AddHuman extends Command{
 
     @Override
     public void execute() {
-        getTreeService().add();
+        getPresenter().add();
     }
 }

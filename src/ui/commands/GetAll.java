@@ -1,10 +1,10 @@
 package ui.commands;
 
-import service.TreeService;
+import Presenter.Presenter;
 
 public class GetAll extends Command{
-    public GetAll(TreeService treeService) {
-        super(treeService);
+    public GetAll(Presenter presenter) {
+        super(presenter);
     }
 
     @Override
@@ -14,6 +14,6 @@ public class GetAll extends Command{
 
     @Override
     public void execute() {
-        getTreeService().sorted();
+        getPresenter().all();
     }
 }

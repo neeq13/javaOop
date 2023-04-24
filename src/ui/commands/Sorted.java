@@ -2,18 +2,18 @@ package ui.commands;
 
 import Presenter.Presenter;
 
-public class AddChild extends Command{
-    public AddChild(Presenter presenter) {
+public class Sorted extends Command {
+    public Sorted(Presenter presenter) {
         super(presenter);
     }
 
     @Override
     public String description() {
-        return "Добавить ребёнка";
+        return "Сортировка дерева";
     }
 
     @Override
     public void execute() {
-        getPresenter().addChild();
+        getPresenter().sorted();
     }
 }

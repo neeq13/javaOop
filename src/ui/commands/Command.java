@@ -1,15 +1,16 @@
 package ui.commands;
 
+import Presenter.Presenter;
 import service.TreeService;
 
 public abstract class Command implements Option {
-    private final TreeService treeService;
+    private final Presenter presenter;
 
-    public Command(TreeService treeService) {
-        this.treeService = treeService;
+    public Command(Presenter presenter) {
+        this.presenter = presenter;
     }
 
-    public TreeService getTreeService() {
-        return treeService;
+    public Presenter getPresenter() {
+        return presenter;
     }
 }

@@ -1,6 +1,6 @@
 package ui;
 
-import service.TreeService;
+import Presenter.Presenter;
 import ui.commands.*;
 
 import java.util.ArrayList;
@@ -9,13 +9,14 @@ import java.util.List;
 public class Menu {
     private final List<Option> commands;
 
-    public Menu(TreeService treeService) {
+    public Menu(Presenter presenter) {
         commands = new ArrayList<>();
-        commands.add(new GetAll(treeService));
-        commands.add(new Search(treeService));
-        commands.add(new AddHuman(treeService));
-        commands.add(new AddChild(treeService));
-        commands.add(new Exit(treeService));
+        commands.add(new GetAll(presenter));
+        commands.add(new Sorted(presenter));
+        commands.add(new Search(presenter));
+        commands.add(new AddHuman(presenter));
+        commands.add(new AddChild(presenter));
+        commands.add(new Exit(presenter));
     }
 
     public void execute(int num){

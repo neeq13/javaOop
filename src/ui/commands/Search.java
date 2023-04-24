@@ -1,10 +1,10 @@
 package ui.commands;
 
-import service.TreeService;
+import Presenter.Presenter;
 
 public class Search extends Command{
-    public Search(TreeService treeService) {
-        super(treeService);
+    public Search(Presenter presenter) {
+        super(presenter);
     }
 
     @Override
@@ -14,6 +14,6 @@ public class Search extends Command{
 
     @Override
     public void execute() {
-        getTreeService().search();
+        getPresenter().search();
     }
 }

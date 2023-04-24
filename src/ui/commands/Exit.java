@@ -1,10 +1,10 @@
 package ui.commands;
 
-import service.TreeService;
+import Presenter.Presenter;
 
 public class Exit extends Command{
-    public Exit(TreeService treeService) {
-        super(treeService);
+    public Exit(Presenter presenter) {
+        super(presenter);
     }
 
     @Override
@@ -14,6 +14,6 @@ public class Exit extends Command{
 
     @Override
     public void execute() {
-        getTreeService().exit();
+        getPresenter().exit();
     }
 }
