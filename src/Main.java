@@ -1,8 +1,9 @@
-import service.StartTree;
+import ui.Console;
+import ui.View;
 
 public class Main {
     public static void main(String[] args) {
-        StartTree startTree = new StartTree();
-        startTree.start();
+        View console = new Console();
+        console.start();
     }
 }
